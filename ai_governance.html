@@ -74,34 +74,6 @@
             stroke-linejoin: round;
         }
 
-        .scroll-chart-wrap {
-            margin-top: 16px;
-            flex: 1;
-            min-height: 120px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            scroll-behavior: smooth;
-            display: flex;
-            align-items: stretch;
-        }
-
-        .scroll-chart-wrap::-webkit-scrollbar {
-            height: 6px;
-        }
-        .scroll-chart-wrap::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .scroll-chart-wrap::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        .scroll-chart-wrap svg {
-            flex-shrink: 0;
-            width: 250%; /* show about 3 months out of 6 in view */
-            height: 100%;
-        }
-
         /* ===== header ===== */
         .topbar {
             display: flex;
@@ -593,6 +565,67 @@
             background: var(--amber);
         }
 
+        .status-pill.approved {
+            background: var(--green-bg);
+            color: var(--green-tx);
+        }
+
+        .status-pill.approved i {
+            background: var(--green);
+        }
+
+        .status-pill.review {
+            background: var(--amber-bg);
+            color: var(--amber-tx);
+        }
+
+        .status-pill.review i {
+            background: var(--amber);
+        }
+
+        .status-pill.unappr {
+            background: var(--orange-bg);
+            color: var(--orange-tx);
+        }
+
+        .status-pill.unappr i {
+            background: var(--orange);
+        }
+
+        .status-pill.blocked {
+            background: var(--slate-bg);
+            color: var(--slate-tx);
+        }
+
+        .status-pill.blocked i {
+            background: var(--slate);
+        }
+
+        /* governance breakdown strip */
+        .gov-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .gov-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .gov-chip i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: block;
+        }
+
         .tt-spend {
             font-size: 12px;
             font-weight: 600;
@@ -821,6 +854,69 @@
             justify-content: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
         }
+
+        /* team spend & risk */
+        .team-row {
+            padding: 13px 0;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        .team-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .team-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+        }
+
+        .team-name {
+            font-size: 12.5px;
+            font-weight: 600;
+        }
+
+        .team-spend {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--dim);
+        }
+
+        .team-track {
+            position: relative;
+            height: 9px;
+            background: var(--border-soft);
+            border-radius: 5px;
+        }
+
+        .team-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            border-radius: 5px;
+            background: var(--blue);
+        }
+
+        .team-risk-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .team-tools {
+            font-size: 10.5px;
+            color: var(--faint);
+        }
+
+        .team-risk-flag {
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
     </style>
 </head>
 
@@ -857,49 +953,49 @@
     <div class="row1">
 
         <!-- Card 1: AI Spend -->
-        <div class="card" style="padding-bottom: 8px;">
+        <div class="card">
             <div class="spend-top">
                 <div>
                     <div class="card-title">AI Spend</div>
                     <div class="card-sub">Usage &amp; spend trend over the last 6 months</div>
                 </div>
+                <div class="legend"><span><i style="background:#3B82F6;"></i>actual</span><span><i
+                            style="background:var(--red);"></i>projected</span></div>
             </div>
             <div class="spend-num">$84,200 <small>/ $95,000</small></div>
 
-            <div class="scroll-chart-wrap" id="spendChartContainer">
-                <svg viewBox="0 0 640 92" preserveAspectRatio="none">
-                    <line x1="0" y1="14" x2="640" y2="14" stroke="var(--border-soft)" stroke-width="1"
-                        vector-effect="non-scaling-stroke" />
-                    <line x1="0" y1="45" x2="640" y2="45" stroke="var(--border-soft)" stroke-width="1"
-                        vector-effect="non-scaling-stroke" />
-                    <line x1="0" y1="76" x2="640" y2="76" stroke="var(--border-soft)" stroke-width="1"
-                        vector-effect="non-scaling-stroke" />
-                    <polyline
-                        points="6,70 20,62 34,72 48,58 62,68 76,50 90,66 104,54 118,64 132,46 146,60 160,72 174,48 188,58 202,40 216,56 230,44 244,62 258,36 272,52 286,20 300,58 314,46 328,30 342,54 356,40 370,60 384,32 398,50 412,26 426,46 440,18 454,42 468,54 482,24 496,44 510,16 524,36 538,22"
-                        fill="none" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-                        vector-effect="non-scaling-stroke" />
-                    <polyline
-                        points="6,70 20,62 34,72 48,58 62,68 76,50 90,66 104,54 118,64 132,46 146,60 160,72 174,48 188,58 202,40 216,56 230,44 244,62 258,36 272,52 286,20 300,58 314,46 328,30 342,54 356,40 370,60 384,32 398,50 412,26 426,46 440,18 454,42 468,54 482,24 496,44 510,16 524,36 538,22 538,92 6,92"
-                        fill="#3B82F6" fill-opacity="0.06" stroke="none" />
-                    <polyline points="70,68 76,50 82,68" fill="none" stroke="var(--red)" stroke-width="1.8"
-                        stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
-                    <polyline points="290,68 300,58 310,68" fill="none" stroke="var(--red)" stroke-width="1.8"
-                        stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
-                    <circle cx="538" cy="22" r="2.5" fill="#3B82F6" />
-                    <text x="4" y="90" class="ax">Mar</text>
-                    <text x="112" y="90" class="ax" text-anchor="middle">Apr</text>
-                    <text x="220" y="90" class="ax" text-anchor="middle">May</text>
-                    <text x="328" y="90" class="ax" text-anchor="middle">Jun</text>
-                    <text x="436" y="90" class="ax" text-anchor="middle">Jul</text>
-                    <text x="536" y="90" class="ax" text-anchor="middle">Aug 15</text>
-                </svg>
-            </div>
+            <svg width="100%" height="70" viewBox="0 0 640 92" preserveAspectRatio="none" style="margin-top:18px;">
+                <line x1="0" y1="14" x2="640" y2="14" stroke="var(--border-soft)" stroke-width="1" />
+                <line x1="0" y1="45" x2="640" y2="45" stroke="var(--border-soft)" stroke-width="1" />
+                <line x1="0" y1="76" x2="640" y2="76" stroke="var(--border-soft)" stroke-width="1" />
+                <polyline
+                    points="6,70 20,62 34,72 48,58 62,68 76,50 90,66 104,54 118,64 132,46 146,60 160,72 174,48 188,58 202,40 216,56 230,44 244,62 258,36 272,52 286,20 300,58 314,46 328,30 342,54 356,40 370,60 384,32 398,50 412,26 426,46 440,18 454,42 468,54 482,24 496,44 510,16 524,36 538,22"
+                    fill="none" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                <polyline
+                    points="6,70 20,62 34,72 48,58 62,68 76,50 90,66 104,54 118,64 132,46 146,60 160,72 174,48 188,58 202,40 216,56 230,44 244,62 258,36 272,52 286,20 300,58 314,46 328,30 342,54 356,40 370,60 384,32 398,50 412,26 426,46 440,18 454,42 468,54 482,24 496,44 510,16 524,36 538,22 538,92 6,92"
+                    fill="#3B82F6" fill-opacity="0.06" stroke="none" />
+                <polyline points="70,68 76,50 82,68" fill="none" stroke="var(--red)" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <polyline points="290,68 300,58 310,68" fill="none" stroke="var(--red)" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <polyline points="538,22 620,4" fill="none" stroke="var(--red)" stroke-width="2"
+                    stroke-dasharray="4 3" />
+                <circle cx="538" cy="22" r="3.2" fill="#3B82F6" />
+                <circle cx="620" cy="4" r="3.2" fill="var(--red)" />
+                <text x="4" y="90" class="ax">Mar</text>
+                <text x="112" y="90" class="ax" text-anchor="middle">Apr</text>
+                <text x="220" y="90" class="ax" text-anchor="middle">May</text>
+                <text x="328" y="90" class="ax" text-anchor="middle">Jun</text>
+                <text x="436" y="90" class="ax" text-anchor="middle">Jul</text>
+                <text x="536" y="90" class="ax" text-anchor="middle">Aug 15</text>
+                <text x="618" y="90" class="ax" text-anchor="end">Aug 31 proj.</text>
+            </svg>
         </div>
 
         <!-- Card 2: Ungoverned AI Spend -->
         <div class="card">
             <div class="card-title">Ungoverned AI Spend</div>
-            <div class="card-sub">Spend on unapproved or blocked AI tools</div>
+            <div class="card-sub">Spend on unapproved or blocked tools</div>
             <div class="spend-num" style="margin-top:10px;">14% <small>of tracked AI spend</small></div>
             <div class="kpi-sub" style="margin-top:2px; color:var(--faint);">Target: under 10%</div>
 
@@ -929,35 +1025,30 @@
             </div>
         </div>
 
-        <!-- Card 3: Unapproved Tools -->
+        <!-- Card 3: Governance Alerts -->
         <div class="card">
-            <div class="card-title">Unapproved Tools</div>
-            <div class="card-sub">Direct Shadow AI risk count</div>
+            <div class="card-title">Governance Alerts</div>
+            <div class="card-sub">3 open items needing action</div>
             <div style="margin-top:14px;">
                 <div class="trow">
-                    <div class="trow-left"><span class="sq" style="background:var(--orange);"></span><span
-                            class="tname">Otter.ai</span></div><span class="tteam">Sales</span>
+                    <div class="trow-left"><span class="sq" style="background:var(--red);"></span><span class="tname"
+                            style="white-space:normal;">Otter.ai — Customer-data risk signal</span>
+                    </div>
                 </div>
                 <div class="trow">
-                    <div class="trow-left"><span class="sq" style="background:var(--orange);"></span><span
-                            class="tname">Perplexity Pro</span></div><span class="tteam">Research</span>
+                    <div class="trow-left"><span class="sq" style="background:var(--red);"></span><span class="tname"
+                            style="white-space:normal;">Midjourney — 44% over monthly budget</span>
+                    </div>
                 </div>
                 <div class="trow">
-                    <div class="trow-left"><span class="sq" style="background:var(--orange);"></span><span
-                            class="tname">Character.AI</span></div><span class="tteam">Support</span>
-                </div>
-                <div class="trow">
-                    <div class="trow-left"><span class="sq" style="background:var(--orange);"></span><span
-                            class="tname">Replit AI</span></div><span class="tteam">Engineering</span>
-                </div>
-                <div class="trow">
-                    <div class="trow-left"><span class="sq" style="background:var(--orange);"></span><span
-                            class="tname">ElevenLabs</span></div><span class="tteam">Marketing</span>
+                    <div class="trow-left"><span class="sq" style="background:var(--amber);"></span><span class="tname"
+                            style="white-space:normal;">Jasper AI — Employee reimbursement
+                            signal</span></div>
                 </div>
             </div>
             <div class="showall"><svg class="icon" viewBox="0 0 24 24">
                     <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" />
-                </svg>Show All 7</div>
+                </svg>View All 6</div>
         </div>
 
     </div>
@@ -967,14 +1058,31 @@
 
         <!-- Card 4: Spend vs Budget by Tool -->
         <div class="card">
-            <div class="card-title">Spend vs. Budget by Tool</div>
-            <div class="card-sub">Month to date · tool-level monthly caps shared across listed teams</div>
+            <div class="alerts-head">
+                <div>
+                    <div class="card-title">Spend vs. Budget by Tool</div>
+                    <div class="card-sub">Month to date · governance status &amp; monthly caps shared across listed
+                        teams</div>
+                </div>
+                <span class="count-tag">Showing 4 highest-risk of 37 tools</span>
+            </div>
+
+            <div class="gov-strip">
+                <span class="gov-chip" style="background:var(--green-bg); color:var(--green-tx);"><i
+                        style="background:var(--green);"></i>22 Approved</span>
+                <span class="gov-chip" style="background:var(--amber-bg); color:var(--amber-tx);"><i
+                        style="background:var(--amber);"></i>4 Under review</span>
+                <span class="gov-chip" style="background:var(--orange-bg); color:var(--orange-tx);"><i
+                        style="background:var(--orange);"></i>7 Unapproved</span>
+                <span class="gov-chip" style="background:var(--slate-bg); color:var(--slate-tx);"><i
+                        style="background:var(--slate);"></i>4 Blocked</span>
+            </div>
 
             <div class="tool-table">
                 <div class="tt-head">
                     <span>Tool</span>
                     <span>Team(s)</span>
-                    <span>Status</span>
+                    <span>Approval</span>
                     <span>Spend / Budget</span>
                     <span style="text-align:right;">30D Trend</span>
                 </div>
@@ -983,7 +1091,7 @@
                     <div class="tt-name">ChatGPT Team</div>
                     <div class="tt-chips"><span class="chip">Eng</span><span class="chip">Marketing</span><span
                             class="chip">+3</span></div>
-                    <div class="status-pill over"><i></i>Over budget</div>
+                    <div class="status-pill approved"><i></i>Approved</div>
                     <div class="tt-spend c-red">$18,400 <span class="of">/ $18,000</span></div>
                     <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
                         <polyline points="1,17 10,15 19,16 28,10 37,11 46,4 55,3" fill="none" stroke="var(--red)"
@@ -992,42 +1100,9 @@
                 </div>
 
                 <div class="tt-row">
-                    <div class="tt-name">Claude (Team)</div>
-                    <div class="tt-chips"><span class="chip">Product</span><span class="chip">Eng</span></div>
-                    <div class="status-pill healthy"><i></i>Healthy</div>
-                    <div class="tt-spend c-green">$9,600 <span class="of">/ $15,000</span></div>
-                    <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
-                        <polyline points="1,16 10,17 19,12 28,13 37,8 46,9 55,6" fill="none" stroke="var(--green)"
-                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-
-                <div class="tt-row">
-                    <div class="tt-name">Grammarly Business</div>
-                    <div class="tt-chips"><span class="chip">All teams</span></div>
-                    <div class="status-pill healthy"><i></i>Healthy</div>
-                    <div class="tt-spend c-green">$4,100 <span class="of">/ $5,000</span></div>
-                    <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
-                        <polyline points="1,10 10,13 19,9 28,14 37,10 46,12 55,9" fill="none" stroke="var(--green)"
-                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-
-                <div class="tt-row">
-                    <div class="tt-name">GitHub Copilot</div>
-                    <div class="tt-chips"><span class="chip">Engineering</span></div>
-                    <div class="status-pill healthy"><i></i>Healthy</div>
-                    <div class="tt-spend c-green">$3,040 <span class="of">/ $6,000</span></div>
-                    <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
-                        <polyline points="1,14 10,12 19,15 28,11 37,13 46,8 55,10" fill="none" stroke="var(--green)"
-                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-
-                <div class="tt-row">
                     <div class="tt-name">Midjourney</div>
                     <div class="tt-chips"><span class="chip">Marketing</span></div>
-                    <div class="status-pill over"><i></i>Over budget</div>
+                    <div class="status-pill review"><i></i>Under review</div>
                     <div class="tt-spend c-red">$2,880 <span class="of">/ $2,000</span></div>
                     <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
                         <polyline points="1,18 10,14 19,15 28,9 37,10 46,5 55,4" fill="none" stroke="var(--red)"
@@ -1038,7 +1113,7 @@
                 <div class="tt-row">
                     <div class="tt-name">Otter.ai</div>
                     <div class="tt-chips"><span class="chip">Sales</span></div>
-                    <div class="status-pill nobudget"><i></i>No budget set</div>
+                    <div class="status-pill unappr"><i></i>Unapproved</div>
                     <div class="tt-spend c-amber"><span class="amt">$1,240</span> <span class="of">/ No budget
                             set</span></div>
                     <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
@@ -1046,72 +1121,95 @@
                             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
+
+                <div class="tt-row">
+                    <div class="tt-name">Jasper AI</div>
+                    <div class="tt-chips"><span class="chip">Marketing</span></div>
+                    <div class="status-pill blocked"><i></i>Blocked</div>
+                    <div class="tt-spend" style="color:var(--faint);">$0 <span class="of">· personal card
+                            detected</span></div>
+                    <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
+                        <polyline points="1,11 6,3 11,19 16,5 21,17 26,4 31,20" fill="none" stroke="var(--slate)"
+                            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
             </div>
 
-            <div class="note-bottom">Tool caps are monthly and shared across listed teams.</div>
+            <div class="note-bottom">Showing the 4 tools that need attention. Remaining 33 tools (incl. Claude,
+                Grammarly, GitHub Copilot) are omitted here — see full list.</div>
         </div>
 
-        <!-- Card 5: Open Governance Alerts (detail) -->
+        <!-- Card 5: Spend & Risk by Team -->
         <div class="card">
             <div class="alerts-head">
-                <div class="card-title">Open Governance Alerts</div>
-                <div class="alerts-head-right">
-                    <span class="count-tag">Showing 3 of 6</span>
-                    <div class="btn-secondary">View all alerts</div>
+                <div>
+                    <div class="card-title">Spend &amp; Risk by Team</div>
+                    <div class="card-sub">Total AI spend vs. spend on flagged (unapproved/under review/blocked) tools
+                    </div>
                 </div>
-            </div>
-            <div class="chip-filters">
-                <div class="chip-filter active">All</div>
-                <div class="chip-filter">Over budget</div>
-                <div class="chip-filter">Data risk</div>
-                <div class="chip-filter">Unapproved</div>
+                <span class="count-tag">5 teams</span>
             </div>
 
-            <div class="alert-row">
-                <div class="alert-icon red"><i></i></div>
-                <div class="alert-body">
-                    <div class="alert-top">
-                        <div class="alert-title-row"><span class="alert-title">Otter.ai — Customer-data risk
-                                signal</span><span class="badge unapproved">Unapproved</span></div>
-                        <span class="alert-due">Due Aug 18</span>
-                    </div>
-                    <div class="alert-meta">Sales team · No DPA on file · Source: SSO + CRM-linked user group ·
-                        Confidence: High · Content captured: No</div>
-                    <div class="alert-bottom">
-                        <span class="alert-owner">Owner: <b>Security + Sales Ops</b></span>
-                    </div>
-                </div>
+            <div class="legend" style="margin-top:14px;">
+                <span><i style="background:var(--blue); border-radius:2px;"></i>Total spend</span>
+                <span><i style="background:var(--orange); border-radius:2px;"></i>At-risk spend</span>
             </div>
 
-            <div class="alert-row">
-                <div class="alert-icon red"><i></i></div>
-                <div class="alert-body">
-                    <div class="alert-top">
-                        <div class="alert-title-row"><span class="alert-title">Midjourney — 44% over monthly
-                                budget</span><span class="badge overbudget">Over budget</span></div>
-                        <span class="alert-due">Due Aug 20</span>
-                    </div>
-                    <div class="alert-meta">Marketing · 3 seats added without budget approval</div>
-                    <div class="alert-bottom">
-                        <span class="alert-owner">Owner: <b>Marketing lead</b></span>
-                    </div>
-                </div>
-            </div>
+            <svg width="100%" height="200" viewBox="0 0 560 200" style="margin-top:14px;">
+                <line x1="0" y1="150" x2="560" y2="150" stroke="var(--border)" stroke-width="1" />
 
-            <div class="alert-row">
-                <div class="alert-icon amber"><i></i></div>
-                <div class="alert-body">
-                    <div class="alert-top">
-                        <div class="alert-title-row"><span class="alert-title">Jasper AI — Employee reimbursement
-                                signal</span><span class="badge blocked">Blocked</span></div>
-                        <span class="alert-due">Due Aug 17</span>
-                    </div>
-                    <div class="alert-meta">$0 company spend · personal-card reimbursement request flagged</div>
-                    <div class="alert-bottom">
-                        <span class="alert-owner">Owner: <b>Procurement + Manager</b></span>
-                    </div>
-                </div>
-            </div>
+                <!-- Engineering: 31500 / 2400 -->
+                <text x="44" y="16" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
+                    font-family="Inter">$31.5k</text>
+                <rect x="38" y="20" width="24" height="130" rx="3" fill="var(--blue)" />
+                <text x="84" y="136" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
+                    font-family="Inter">$2.4k</text>
+                <rect x="66" y="140" width="24" height="10" rx="3" fill="var(--orange)" />
+                <text x="64" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
+                    font-family="Inter">Engineering</text>
+
+                <!-- Marketing: 19800 / 5800 -->
+                <text x="156" y="64" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
+                    font-family="Inter">$19.8k</text>
+                <rect x="150" y="68" width="24" height="82" rx="3" fill="var(--blue)" />
+                <text x="194" y="122" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
+                    font-family="Inter">$5.8k</text>
+                <rect x="176" y="126" width="24" height="24" rx="3" fill="var(--orange)" />
+                <text x="175" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
+                    font-family="Inter">Marketing</text>
+
+                <!-- Product: 14300 / 1200 -->
+                <text x="268" y="87" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
+                    font-family="Inter">$14.3k</text>
+                <rect x="262" y="91" width="24" height="59" rx="3" fill="var(--blue)" />
+                <text x="306" y="141" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
+                    font-family="Inter">$1.2k</text>
+                <rect x="288" y="145" width="24" height="5" rx="2" fill="var(--orange)" />
+                <text x="287" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
+                    font-family="Inter">Product</text>
+
+                <!-- Sales: 10200 / 1240 -->
+                <text x="380" y="104" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
+                    font-family="Inter">$10.2k</text>
+                <rect x="374" y="108" width="24" height="42" rx="3" fill="var(--blue)" />
+                <text x="418" y="141" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
+                    font-family="Inter">$1.2k</text>
+                <rect x="400" y="145" width="24" height="5" rx="2" fill="var(--orange)" />
+                <text x="399" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
+                    font-family="Inter">Sales</text>
+
+                <!-- Org-wide: 8400 / 1160 -->
+                <text x="468" y="111" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
+                    font-family="Inter">$8.4k</text>
+                <rect x="462" y="115" width="24" height="35" rx="3" fill="var(--blue)" />
+                <text x="506" y="141" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
+                    font-family="Inter">$1.2k</text>
+                <rect x="488" y="145" width="24" height="5" rx="2" fill="var(--orange)" />
+                <text x="487" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
+                    font-family="Inter">Org-wide</text>
+            </svg>
+
+            <div class="note-bottom">At-risk spend = spend on tools not fully approved. Shared-tool spend (e.g., ChatGPT, Claude) is split across owning teams for this estimate.</div>
         </div>
 
     </div>
@@ -1121,13 +1219,6 @@
             <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
         </svg></div>
 
-    <script>
-        // Auto-scroll the chart to the end so the most recent months are visible first
-        const chartWrap = document.getElementById('spendChartContainer');
-        if (chartWrap) {
-            chartWrap.scrollLeft = chartWrap.scrollWidth;
-        }
-    </script>
 </body>
 
 </html>
