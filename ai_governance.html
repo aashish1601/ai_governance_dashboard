@@ -917,16 +917,195 @@
             padding: 3px 8px;
             border-radius: 6px;
         }
+        /* ===== layout ===== */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 220px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: width 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: 64px;
+        }
+
+        .sidebar-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 18px;
+            height: 74px; /* Matches topbar roughly */
+        }
+
+        .sidebar.collapsed .brand-title {
+            display: none;
+        }
+        
+        .sidebar.collapsed .sidebar-top {
+            justify-content: center;
+            padding: 22px 0;
+        }
+        .sidebar.collapsed .sidebar-toggle {
+            display: none;
+        }
+        .sidebar.collapsed .brand-mark {
+            margin: 0;
+        }
+
+        .sidebar-toggle {
+            cursor: pointer;
+            color: var(--dim);
+            padding: 4px;
+        }
+        .sidebar-toggle:hover {
+            color: var(--text);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--dim);
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.15s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: #E5F0FF;
+            color: var(--blue);
+            font-weight: 600;
+            border-left: 3px solid var(--blue);
+        }
+
+        .sidebar.collapsed .nav-label {
+            display: none;
+        }
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .sidebar-bottom {
+            padding: 10px;
+            padding-bottom: 24px;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border-soft);
+            margin: 10px 0;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 22px 28px 40px;
+        }
+        
+        /* Disable body padding since main-content handles it now */
+        body {
+            padding: 0 !important;
+        }
+
+        .placeholder-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            flex-direction: column;
+            gap: 12px;
+            color: var(--faint);
+            font-size: 14px;
+        }
     </style>
 </head>
 
 <body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <div class="brand">
+                    <div class="brand-mark">◆</div>
+                    <div class="brand-title">AI Governance</div>
+                </div>
+                <div class="sidebar-toggle" id="sidebarToggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed')">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard" onclick="navTo('dashboard', this)">
+                    <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="inventory" onclick="navTo('inventory', this)">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    <span class="nav-label">Tool Inventory</span>
+                </a>
+                <a href="#" class="nav-item" data-page="alerts" onclick="navTo('alerts', this)">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span class="nav-label">Alerts</span>
+                </a>
+                <a href="#" class="nav-item" data-page="teams" onclick="navTo('teams', this)">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span class="nav-label">Teams</span>
+                </a>
+                <a href="#" class="nav-item" data-page="reports" onclick="navTo('reports', this)">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span class="nav-label">Reports</span>
+                </a>
+                <a href="#" class="nav-item" data-page="settings" onclick="navTo('settings', this)">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span class="nav-label">Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="sidebar-divider"></div>
+                <a href="#" class="nav-item" data-page="user" onclick="navTo('user', this)">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span class="nav-label">Aashish Mhaske</span>
+                </a>
+            </div>
+        </aside>
 
-    <div class="topbar">
-        <div class="brand">
-            <div class="brand-mark">◆</div>
-            <div class="brand-title">AI Governance Dashboard</div>
-        </div>
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <div id="dashboard-view">
+                <div class="topbar">
+                    <div class="topbar-left" style="display:flex; align-items:center; gap:16px;">
+                        <div style="font-size:11px; color:var(--dim); display:flex; align-items:center; gap:6px;">
+                            <svg class="icon" viewBox="0 0 24 24" style="width:11px;height:11px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                            <span id="refreshLabel">Refreshed just now</span>
+                        </div>
+                    </div>
         <div class="tabs">
             <div class="tab"><svg class="icon" viewBox="0 0 24 24">
                     <rect x="3" y="5" width="18" height="16" rx="2" />
@@ -962,7 +1141,7 @@
                 <div class="legend"><span><i style="background:#3B82F6;"></i>actual</span><span><i
                             style="background:var(--red);"></i>projected</span></div>
             </div>
-            <div class="spend-num">$84,200 <small>/ $95,000</small></div>
+            <div class="spend-num"><span data-animate="84200" data-format="currency">0</span> <small style="opacity:0; transition:opacity 0.3s;" id="budgetLabel">/ $95,000</small></div>
 
             <svg width="100%" height="70" viewBox="0 0 640 92" preserveAspectRatio="none" style="margin-top:18px;">
                 <line x1="0" y1="14" x2="640" y2="14" stroke="var(--border-soft)" stroke-width="1" />
@@ -996,7 +1175,7 @@
         <div class="card">
             <div class="card-title">Ungoverned AI Spend</div>
             <div class="card-sub">Spend on unapproved or blocked tools</div>
-            <div class="spend-num" style="margin-top:10px;">14% <small>of tracked AI spend</small></div>
+            <div class="spend-num" style="margin-top:10px;"><span data-animate="14" data-format="percent">0</span> <small>of tracked AI spend</small></div>
             <div class="kpi-sub" style="margin-top:2px; color:var(--faint);">Target: under 10%</div>
 
             <div style="margin-top:20px;">
@@ -1009,7 +1188,7 @@
                     <div class="thresh-band" style="width:25%; background:var(--green-bg);"></div>
                     <div class="thresh-band" style="width:25%; background:var(--amber-bg);"></div>
                     <div class="thresh-band" style="width:50%; background:var(--red-bg);"></div>
-                    <div class="thresh-fill" style="width:70%;"></div>
+                    <div class="thresh-fill" style="width:0%;" id="threshFill"></div>
                     <div class="thresh-target" style="left:50%;"></div>
                 </div>
                 <div class="thresh-ticks">
@@ -1021,14 +1200,14 @@
             </div>
 
             <div class="kpi-sub" style="margin-top:16px;">
-                <span style="color:var(--red-tx); font-weight:700;">↑ 5.0 pp</span>vs. prior 30 days
+                <span style="color:var(--red-tx); font-weight:700;">↑ <span data-animate="5" data-format="decimal" data-suffix=" pp">0</span></span>vs. prior 30 days
             </div>
         </div>
 
         <!-- Card 3: Governance Alerts -->
         <div class="card">
             <div class="card-title">Governance Alerts</div>
-            <div class="card-sub">3 open items needing action</div>
+            <div class="card-sub"><span data-animate="3" data-format="count">0</span> open items needing action</div>
             <div style="margin-top:14px;">
                 <div class="trow">
                     <div class="trow-left"><span class="sq" style="background:var(--red);"></span><span class="tname"
@@ -1069,13 +1248,13 @@
 
             <div class="gov-strip">
                 <span class="gov-chip" style="background:var(--green-bg); color:var(--green-tx);"><i
-                        style="background:var(--green);"></i>22 Approved</span>
+                        style="background:var(--green);"></i><span data-animate="22" data-format="count">0</span> Approved</span>
                 <span class="gov-chip" style="background:var(--amber-bg); color:var(--amber-tx);"><i
-                        style="background:var(--amber);"></i>4 Under review</span>
+                        style="background:var(--amber);"></i><span data-animate="4" data-format="count">0</span> Under review</span>
                 <span class="gov-chip" style="background:var(--orange-bg); color:var(--orange-tx);"><i
-                        style="background:var(--orange);"></i>7 Unapproved</span>
+                        style="background:var(--orange);"></i><span data-animate="7" data-format="count">0</span> Unapproved</span>
                 <span class="gov-chip" style="background:var(--slate-bg); color:var(--slate-tx);"><i
-                        style="background:var(--slate);"></i>4 Blocked</span>
+                        style="background:var(--slate);"></i><span data-animate="4" data-format="count">0</span> Blocked</span>
             </div>
 
             <div class="tool-table">
@@ -1092,7 +1271,7 @@
                     <div class="tt-chips"><span class="chip">Eng</span><span class="chip">Marketing</span><span
                             class="chip">+3</span></div>
                     <div class="status-pill approved"><i></i>Approved</div>
-                    <div class="tt-spend c-red">$18,400 <span class="of">/ $18,000</span></div>
+                    <div class="tt-spend c-red"><span data-animate="18400" data-format="currency" data-delay="100">0</span> <span class="of">/ $18,000</span></div>
                     <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
                         <polyline points="1,17 10,15 19,16 28,10 37,11 46,4 55,3" fill="none" stroke="var(--red)"
                             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
@@ -1103,7 +1282,7 @@
                     <div class="tt-name">Midjourney</div>
                     <div class="tt-chips"><span class="chip">Marketing</span></div>
                     <div class="status-pill review"><i></i>Under review</div>
-                    <div class="tt-spend c-red">$2,880 <span class="of">/ $2,000</span></div>
+                    <div class="tt-spend c-red"><span data-animate="2880" data-format="currency" data-delay="200">0</span> <span class="of">/ $2,000</span></div>
                     <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
                         <polyline points="1,18 10,14 19,15 28,9 37,10 46,5 55,4" fill="none" stroke="var(--red)"
                             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
@@ -1114,7 +1293,7 @@
                     <div class="tt-name">Otter.ai</div>
                     <div class="tt-chips"><span class="chip">Sales</span></div>
                     <div class="status-pill unappr"><i></i>Unapproved</div>
-                    <div class="tt-spend c-amber"><span class="amt">$1,240</span> <span class="of">/ No budget
+                    <div class="tt-spend c-amber"><span class="amt" data-animate="1240" data-format="currency" data-delay="300">0</span> <span class="of">/ No budget
                             set</span></div>
                     <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
                         <polyline points="1,12 10,16 19,10 28,17 37,9 46,14 55,11" fill="none" stroke="var(--amber)"
@@ -1126,7 +1305,7 @@
                     <div class="tt-name">Jasper AI</div>
                     <div class="tt-chips"><span class="chip">Marketing</span></div>
                     <div class="status-pill blocked"><i></i>Blocked</div>
-                    <div class="tt-spend" style="color:var(--faint);">$0 <span class="of">· personal card
+                    <div class="tt-spend" style="color:var(--faint);"><span data-animate="0" data-format="currency" data-delay="400">0</span> <span class="of">· personal card
                             detected</span></div>
                     <svg class="tt-trend" width="56" height="22" viewBox="0 0 56 22">
                         <polyline points="1,11 6,3 11,19 16,5 21,17 26,4 31,20" fill="none" stroke="var(--slate)"
@@ -1160,51 +1339,51 @@
 
                 <!-- Engineering: 31500 / 2400 -->
                 <text x="44" y="16" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
-                    font-family="Inter">$31.5k</text>
-                <rect x="38" y="20" width="24" height="130" rx="3" fill="var(--blue)" />
+                    font-family="Inter" data-animate="31.5" data-format="k" data-delay="100" data-svg-text-y="16" data-svg-text-start="146">0</text>
+                <rect x="38" y="20" width="24" height="130" rx="3" fill="var(--blue)" data-animate-rect="130" data-rect-y="20" data-rect-base="150" data-delay="100" />
                 <text x="84" y="136" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
-                    font-family="Inter">$2.4k</text>
-                <rect x="66" y="140" width="24" height="10" rx="3" fill="var(--orange)" />
+                    font-family="Inter" data-animate="2.4" data-format="k" data-delay="100" data-svg-text-y="136" data-svg-text-start="146">0</text>
+                <rect x="66" y="140" width="24" height="10" rx="3" fill="var(--orange)" data-animate-rect="10" data-rect-y="140" data-rect-base="150" data-delay="100" />
                 <text x="64" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
                     font-family="Inter">Engineering</text>
 
                 <!-- Marketing: 19800 / 5800 -->
                 <text x="156" y="64" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
-                    font-family="Inter">$19.8k</text>
-                <rect x="150" y="68" width="24" height="82" rx="3" fill="var(--blue)" />
+                    font-family="Inter" data-animate="19.8" data-format="k" data-delay="200" data-svg-text-y="64" data-svg-text-start="146">0</text>
+                <rect x="150" y="68" width="24" height="82" rx="3" fill="var(--blue)" data-animate-rect="82" data-rect-y="68" data-rect-base="150" data-delay="200" />
                 <text x="194" y="122" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
-                    font-family="Inter">$5.8k</text>
-                <rect x="176" y="126" width="24" height="24" rx="3" fill="var(--orange)" />
+                    font-family="Inter" data-animate="5.8" data-format="k" data-delay="200" data-svg-text-y="122" data-svg-text-start="146">0</text>
+                <rect x="176" y="126" width="24" height="24" rx="3" fill="var(--orange)" data-animate-rect="24" data-rect-y="126" data-rect-base="150" data-delay="200" />
                 <text x="175" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
                     font-family="Inter">Marketing</text>
 
                 <!-- Product: 14300 / 1200 -->
                 <text x="268" y="87" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
-                    font-family="Inter">$14.3k</text>
-                <rect x="262" y="91" width="24" height="59" rx="3" fill="var(--blue)" />
+                    font-family="Inter" data-animate="14.3" data-format="k" data-delay="300" data-svg-text-y="87" data-svg-text-start="146">0</text>
+                <rect x="262" y="91" width="24" height="59" rx="3" fill="var(--blue)" data-animate-rect="59" data-rect-y="91" data-rect-base="150" data-delay="300" />
                 <text x="306" y="141" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
-                    font-family="Inter">$1.2k</text>
-                <rect x="288" y="145" width="24" height="5" rx="2" fill="var(--orange)" />
+                    font-family="Inter" data-animate="1.2" data-format="k" data-delay="300" data-svg-text-y="141" data-svg-text-start="146">0</text>
+                <rect x="288" y="145" width="24" height="5" rx="2" fill="var(--orange)" data-animate-rect="5" data-rect-y="145" data-rect-base="150" data-delay="300" />
                 <text x="287" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
                     font-family="Inter">Product</text>
 
                 <!-- Sales: 10200 / 1240 -->
                 <text x="380" y="104" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
-                    font-family="Inter">$10.2k</text>
-                <rect x="374" y="108" width="24" height="42" rx="3" fill="var(--blue)" />
+                    font-family="Inter" data-animate="10.2" data-format="k" data-delay="400" data-svg-text-y="104" data-svg-text-start="146">0</text>
+                <rect x="374" y="108" width="24" height="42" rx="3" fill="var(--blue)" data-animate-rect="42" data-rect-y="108" data-rect-base="150" data-delay="400" />
                 <text x="418" y="141" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
-                    font-family="Inter">$1.2k</text>
-                <rect x="400" y="145" width="24" height="5" rx="2" fill="var(--orange)" />
+                    font-family="Inter" data-animate="1.2" data-format="k" data-delay="400" data-svg-text-y="141" data-svg-text-start="146">0</text>
+                <rect x="400" y="145" width="24" height="5" rx="2" fill="var(--orange)" data-animate-rect="5" data-rect-y="145" data-rect-base="150" data-delay="400" />
                 <text x="399" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
                     font-family="Inter">Sales</text>
 
                 <!-- Org-wide: 8400 / 1160 -->
                 <text x="468" y="111" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)"
-                    font-family="Inter">$8.4k</text>
-                <rect x="462" y="115" width="24" height="35" rx="3" fill="var(--blue)" />
+                    font-family="Inter" data-animate="8.4" data-format="k" data-delay="500" data-svg-text-y="111" data-svg-text-start="146">0</text>
+                <rect x="462" y="115" width="24" height="35" rx="3" fill="var(--blue)" data-animate-rect="35" data-rect-y="115" data-rect-base="150" data-delay="500" />
                 <text x="506" y="141" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--orange-tx)"
-                    font-family="Inter">$1.2k</text>
-                <rect x="488" y="145" width="24" height="5" rx="2" fill="var(--orange)" />
+                    font-family="Inter" data-animate="1.2" data-format="k" data-delay="500" data-svg-text-y="141" data-svg-text-start="146">0</text>
+                <rect x="488" y="145" width="24" height="5" rx="2" fill="var(--orange)" data-animate-rect="5" data-rect-y="145" data-rect-base="150" data-delay="500" />
                 <text x="487" y="168" text-anchor="middle" font-size="10.5" fill="var(--dim)"
                     font-family="Inter">Org-wide</text>
             </svg>
@@ -1215,7 +1394,127 @@
 
     </div>
 
+            </div> <!-- end dashboard-view -->
+            <div id="placeholder-view" class="placeholder-page" style="display:none;">
+                <svg class="icon" viewBox="0 0 24 24" style="width:32px;height:32px;margin-bottom:12px;opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                <div style="font-weight:600; font-size:16px; color:var(--text);">Coming soon</div>
+                <div>This page is a placeholder for the prototype.</div>
+            </div>
+        </main>
+    </div>
+
     <script>
+        // Animation logic
+        function easeOutQuad(t) { return t * (2 - t); }
+        
+        function formatNumber(num, format, suffix = '') {
+            if (format === 'currency') return '$' + Math.round(num).toLocaleString() + suffix;
+            if (format === 'percent') return Math.round(num) + '%' + suffix;
+            if (format === 'decimal') return num.toFixed(1) + suffix;
+            if (format === 'k') return '$' + num.toFixed(1) + 'k' + suffix;
+            return Math.round(num) + suffix;
+        }
+
+        function runAnimations() {
+            // Animate text numbers
+            document.querySelectorAll('[data-animate]').forEach(el => {
+                const target = parseFloat(el.getAttribute('data-animate'));
+                const format = el.getAttribute('data-format') || 'count';
+                const suffix = el.getAttribute('data-suffix') || '';
+                const delay = parseInt(el.getAttribute('data-delay') || '0');
+                const duration = 600;
+                
+                el.textContent = formatNumber(0, format, suffix);
+
+                setTimeout(() => {
+                    let start = null;
+                    function step(timestamp) {
+                        if (!start) start = timestamp;
+                        const progress = Math.min((timestamp - start) / duration, 1);
+                        const easeProgress = easeOutQuad(progress);
+                        
+                        el.textContent = formatNumber(target * easeProgress, format, suffix);
+                        
+                        // Handle linked SVG text y-position
+                        if(el.hasAttribute('data-svg-text-y')) {
+                            const endY = parseFloat(el.getAttribute('data-svg-text-y'));
+                            const startY = parseFloat(el.getAttribute('data-svg-text-start'));
+                            el.setAttribute('y', startY + (endY - startY) * easeProgress);
+                        }
+
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        } else if (el.closest('.spend-num') && document.getElementById('budgetLabel')) {
+                            document.getElementById('budgetLabel').style.opacity = '1';
+                        }
+                    }
+                    window.requestAnimationFrame(step);
+                }, delay);
+            });
+
+            // Animate SVG Rects
+            document.querySelectorAll('[data-animate-rect]').forEach(el => {
+                const targetH = parseFloat(el.getAttribute('data-animate-rect'));
+                const targetY = parseFloat(el.getAttribute('data-rect-y'));
+                const base = parseFloat(el.getAttribute('data-rect-base'));
+                const delay = parseInt(el.getAttribute('data-delay') || '0');
+                const duration = 600;
+
+                el.setAttribute('height', '0');
+                el.setAttribute('y', base);
+
+                setTimeout(() => {
+                    let start = null;
+                    function step(timestamp) {
+                        if (!start) start = timestamp;
+                        const progress = Math.min((timestamp - start) / duration, 1);
+                        const easeProgress = easeOutQuad(progress);
+                        
+                        el.setAttribute('height', targetH * easeProgress);
+                        el.setAttribute('y', base - (base - targetY) * easeProgress);
+                        
+                        if (progress < 1) window.requestAnimationFrame(step);
+                    }
+                    window.requestAnimationFrame(step);
+                }, delay);
+            });
+
+            // Animate Gauge
+            const gauge = document.getElementById('threshFill');
+            if(gauge) {
+                gauge.style.width = '0%';
+                let start = null;
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    const progress = Math.min((timestamp - start) / 600, 1);
+                    gauge.style.width = (70 * easeOutQuad(progress)) + '%';
+                    if (progress < 1) window.requestAnimationFrame(step);
+                }
+                window.requestAnimationFrame(step);
+            }
+            
+            // Hide budget label initially
+            const budgetLbl = document.getElementById('budgetLabel');
+            if(budgetLbl) budgetLbl.style.opacity = '0';
+        }
+
+        function navTo(page, el) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            if(page === 'dashboard') {
+                document.getElementById('dashboard-view').style.display = 'block';
+                document.getElementById('placeholder-view').style.display = 'none';
+                runAnimations();
+            } else {
+                document.getElementById('dashboard-view').style.display = 'none';
+                document.getElementById('placeholder-view').style.display = 'flex';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            runAnimations();
+        });
+
         // Auto-scroll the chart to the end so the most recent months are visible first
         const chartWrap = document.getElementById('spendChartContainer');
         if (chartWrap) {
